@@ -1,10 +1,11 @@
+from pathlib import Path
 from datetime import datetime
 
 from sqlalchemy import create_engine, String, Integer, Float, DateTime
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-engine = create_engine('sqlite:///:meu_db')
-
+pastal_atual = Path(__file__).parent
+caminho_DB = pastal_atual / 'BancoDeDados.sqlite'
 
 class Base(DeclarativeBase):
     pass
@@ -37,3 +38,6 @@ class Usuarios(Base):
     acesso_internet: Mapped[str] = mapped_column(String(5))
     tipo_moradia: Mapped[str] = mapped_column(String(10))
     data_hora: Mapped[datetime] = mapped_column(DateTime)
+
+engine = create_engine(f'sqlite:///{caminho_DB}')
+Base.metadata.create_all(bind=engine)
