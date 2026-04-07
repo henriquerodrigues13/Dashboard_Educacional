@@ -2,7 +2,7 @@ from pathlib import Path
 from datetime import datetime
 
 from sqlalchemy import create_engine, String, Integer, Float, DateTime
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session
 
 pastal_atual = Path(__file__).parent
 caminho_DB = pastal_atual / 'BancoDeDados.sqlite'
@@ -41,3 +41,58 @@ class Usuarios(Base):
 
 engine = create_engine(f'sqlite:///{caminho_DB}')
 Base.metadata.create_all(bind=engine)
+
+def criando_usarario(
+        matricula: int,
+        genero: str,
+        periodo: str,
+        polo: str,
+        cor_etnia: str,
+        pdc: str,
+        tipo_deficiencia: str,
+        renda: str,
+        deslocamento: str,
+        trabalho: str,
+        assistencia_estudantil: str,
+        saude_mental: str,
+        estresse: str,
+        acompanhamento: str,
+        escolaridade_pai: str,
+        escolaridade_mae: str,
+        qtd_computador: int,
+        qtd_celular: int,
+        computador_proprio: str,
+        gasto_internet: str,
+        acesso_internet: str,
+        tipo_moradia: str,
+        data_hora: datetime,
+):
+
+    with Session(bind=engine) as session:
+        usuario = Usuarios(
+            matricula=matricula,
+            genero=genero,
+            periodo=periodo,
+            polo=polo,
+            cor_etnia=cor_etnia,
+            pdc=pdc,
+            tipo_deficiencia=tipo_deficiencia,
+            renda=renda,
+            deslocamento=deslocamento,
+            trabalho=trabalho,
+            assistencia_estudantil=assistencia_estudantil,
+            saude_mental=saude_mental,
+            estresse=estresse,
+            acompanhamento=acompanhamento,
+            escolaridade_pai=escolaridade_pai,
+            escolaridade_mae=escolaridade_mae,
+            qtd_computador=qtd_computador,
+            qtd_celular=qtd_celular,
+            computador_proprio=computador_proprio,
+            gasto_internet=gasto_internet,
+            acesso_internet=acesso_internet,
+            tipo_moradia=tipo_moradia,
+            data_hora=data_hora
+        )
+        session.add(usuario)
+        session.commit()
