@@ -15,40 +15,40 @@ class Usuarios(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     matricula: Mapped[int] = mapped_column(Integer, nullable=False)
-    genero: Mapped[str] = mapped_column(String(20))
+    periodo: Mapped[str] = mapped_column(String(15), nullable=False)
+    genero: Mapped[str] = mapped_column(String(20),nullable=True)
     #crg: Mapped[float] = mapped_column(Float, nullable=False)
-    periodo: Mapped[str] = mapped_column(String(15))
-    polo: Mapped[str] = mapped_column(String(15))
-    cor_etnia: Mapped[str] = mapped_column(String(10))
-    pdc: Mapped[str] = mapped_column(String(5))
-    tipo_deficiencia: Mapped[str] = mapped_column(String(100))
-    renda: Mapped[str] = mapped_column(String(150))
-    deslocamento: Mapped[str] = mapped_column(String(150))
-    trabalho: Mapped[str] = mapped_column(String(150))
-    assistencia_estudantil: Mapped[str] = mapped_column(String(5))
-    saude_mental: Mapped[str] = mapped_column(String(10))
-    estresse: Mapped[str] = mapped_column(String(50))
-    acompanhamento: Mapped[str] = mapped_column(String(20))
-    escolaridade_pai: Mapped[str] = mapped_column(String(20))
-    escolaridade_mae: Mapped[str] = mapped_column(String(20))
-    qtd_computador: Mapped[int] = mapped_column(Integer)
-    qtd_celular: Mapped[int] = mapped_column(Integer)
-    computador_proprio: Mapped[str] = mapped_column(String(5))
-    gasto_internet: Mapped[str] = mapped_column(String(30))
-    acesso_internet: Mapped[str] = mapped_column(String(5))
-    tipo_moradia: Mapped[str] = mapped_column(String(10))
-    data_hora: Mapped[datetime] = mapped_column(DateTime)
+    polo: Mapped[str] = mapped_column(String(15),nullable=True)
+    cor_etnia: Mapped[str] = mapped_column(String(10),nullable=True)
+    pcd: Mapped[str] = mapped_column(String(5),nullable=True)
+    tipo_deficiencia: Mapped[str] = mapped_column(String(100),nullable=True)
+    renda: Mapped[str] = mapped_column(String(150),nullable=True)
+    deslocamento: Mapped[str] = mapped_column(String(150),nullable=True)
+    trabalho: Mapped[str] = mapped_column(String(150),nullable=True)
+    assistencia_estudantil: Mapped[str] = mapped_column(String(5),nullable=True)
+    saude_mental: Mapped[str] = mapped_column(String(10),nullable=True)
+    estresse: Mapped[str] = mapped_column(String(50),nullable=True)
+    acompanhamento: Mapped[str] = mapped_column(String(20),nullable=True)
+    escolaridade_pai: Mapped[str] = mapped_column(String(20),nullable=True)
+    escolaridade_mae: Mapped[str] = mapped_column(String(20),nullable=True)
+    qtd_computador: Mapped[int] = mapped_column(Integer,nullable=True)
+    qtd_celular: Mapped[int] = mapped_column(Integer,nullable=True)
+    computador_proprio: Mapped[str] = mapped_column(String(5),nullable=True)
+    gasto_internet: Mapped[str] = mapped_column(String(30),nullable=True)
+    acesso_internet: Mapped[str] = mapped_column(String(5),nullable=True)
+    tipo_moradia: Mapped[str] = mapped_column(String(10),nullable=True)
+    data_hora: Mapped[datetime] = mapped_column(DateTime,nullable=True)
 
 engine = create_engine(f'sqlite:///{caminho_DB}')
 Base.metadata.create_all(bind=engine)
 
-def criando_usarario(
+def criando_usuario(
         matricula: int,
-        genero: str,
         periodo: str,
+        genero: str,
         polo: str,
         cor_etnia: str,
-        pdc: str,
+        pcd: str,
         tipo_deficiencia: str,
         renda: str,
         deslocamento: str,
@@ -71,11 +71,11 @@ def criando_usarario(
     with Session(bind=engine) as session:
         usuario = Usuarios(
             matricula=matricula,
-            genero=genero,
             periodo=periodo,
+            genero=genero,
             polo=polo,
             cor_etnia=cor_etnia,
-            pdc=pdc,
+            pcd=pcd,
             tipo_deficiencia=tipo_deficiencia,
             renda=renda,
             deslocamento=deslocamento,
