@@ -1,5 +1,6 @@
 from datetime import datetime
 from src.database.engine import criando_usuario
+from src.utils.validação_de_dados import validacao
 import os
 import requests
 import dotenv
@@ -29,29 +30,30 @@ for i in range(1,6):
         todos_os_dados = response_json['dados']
         if todos_os_dados is not None:
             for registros in todos_os_dados:
-                registros['data_hora'] = datetime.fromisoformat(registros['data_hora'])
-                criando_usuario(
-                    matricula=registros['matricula'],
-                    periodo=registros['periodo'],
-                    genero=registros['genero'],
-                    polo=registros['polo'],
-                    cor_etnia=registros['cor_etnia'],
-                    pcd=registros['pcd'],
-                    tipo_deficiencia=registros['tipo_deficiencia'],
-                    renda=registros['renda'],
-                    deslocamento=registros['deslocamento'],
-                    trabalho=registros['trabalho'],
-                    assistencia_estudantil=registros['assistencia_estudantil'],
-                    saude_mental=registros['saude_mental'],
-                    estresse=registros['estresse'],
-                    acompanhamento=registros['acompanhamento'],
-                    escolaridade_pai=registros['escolaridade_pai'],
-                    escolaridade_mae=registros['escolaridade_mae'],
-                    qtd_computador=registros['qtd_computador'],
-                    qtd_celular=registros['qtd_celular'],
-                    computador_proprio=registros['computador_proprio'],
-                    gasto_internet=registros['gasto_internet'],
-                    acesso_internet=registros['acesso_internet'],
-                    tipo_moradia=registros['tipo_moradia'],
-                    data_hora=registros['data_hora'],
-                        )
+                if valido := validacao(matricula=registros['matricula'], periodo=registros['periodo']):
+                    registros['data_hora'] = datetime.fromisoformat(registros['data_hora'])
+                    criando_usuario(
+                        matricula=registros['matricula'],
+                        periodo=registros['periodo'],
+                        genero=registros['genero'],
+                        polo=registros['polo'],
+                        cor_etnia=registros['cor_etnia'],
+                        pcd=registros['pcd'],
+                        tipo_deficiencia=registros['tipo_deficiencia'],
+                        renda=registros['renda'],
+                        deslocamento=registros['deslocamento'],
+                        trabalho=registros['trabalho'],
+                        assistencia_estudantil=registros['assistencia_estudantil'],
+                        saude_mental=registros['saude_mental'],
+                        estresse=registros['estresse'],
+                        acompanhamento=registros['acompanhamento'],
+                        escolaridade_pai=registros['escolaridade_pai'],
+                        escolaridade_mae=registros['escolaridade_mae'],
+                        qtd_computador=registros['qtd_computador'],
+                        qtd_celular=registros['qtd_celular'],
+                        computador_proprio=registros['computador_proprio'],
+                        gasto_internet=registros['gasto_internet'],
+                        acesso_internet=registros['acesso_internet'],
+                        tipo_moradia=registros['tipo_moradia'],
+                        data_hora=registros['data_hora'],
+                            )
