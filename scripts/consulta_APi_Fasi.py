@@ -1,6 +1,6 @@
 from datetime import datetime
 from src.database.engine import criando_usuario
-from src.utils.validação_de_dados import validacao
+from src.utils.validação_de_dados import verificacao
 import os
 import requests
 import dotenv
@@ -30,7 +30,7 @@ for i in range(1,6):
         todos_os_dados = response_json['dados']
         if todos_os_dados is not None:
             for registros in todos_os_dados:
-                if valido := validacao(matricula=registros['matricula'], periodo=registros['periodo']):
+                if valido := verificacao(matricula=registros['matricula'], periodo=registros['periodo']):
                     registros['data_hora'] = datetime.fromisoformat(registros['data_hora'])
                     criando_usuario(
                         matricula=registros['matricula'],
