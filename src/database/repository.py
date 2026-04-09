@@ -1,11 +1,18 @@
 from pathlib import Path
-from engine import Usuarios
+from src.database.engine import Usuarios
 from sqlalchemy import create_engine, select, func
 from sqlalchemy.orm import Session
 
 
 caminho_DB = Path(__file__).parent / 'BancoDeDados.sqlite'
 engine = create_engine(f'sqlite:///{caminho_DB}')
+
+
+def matriculas_unicas():
+    with Session(bind=engine) as session:
+        comando_sql = select(func.count(Usuarios.matricula.distinct()).label('total_matricula_unicas'))
+        resposta = session.execute(comando_sql).all()
+        return resposta[0][0]
 
 def consulta_bidimensional(primeiro_arg,segundo_arg):
     primeiro_arg = parametros_do_select(primeiro_arg)
@@ -57,7 +64,3 @@ def parametros_do_select(parametro):
             return Usuarios.tipo_moradia
     return None
 
-
-response = consulta_bidimensional(primeiro_arg='tipo moradia',segundo_arg='escolaridade pai')
-for x,y, z in response:
-    print(x,y,z)
