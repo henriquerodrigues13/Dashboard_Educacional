@@ -10,9 +10,16 @@ engine = create_engine(f'sqlite:///{caminho_DB}')
 
 def matriculas_unicas():
     with Session(bind=engine) as session:
-        comando_sql = select(func.count(Usuarios.matricula.distinct()).label('total_matricula_unicas'))
+        comando_sql = select(func.count(Usuarios.matricula.distinct()))
         resposta = session.execute(comando_sql).all()
         return resposta[0][0]
+
+def consulta_por_argumento(argumento):
+    argumento = parametros_do_select(argumento)
+    with Session(bind=engine) as session:
+        comando_sql = select(argumento)
+        resposta = session.execute(comando_sql).all()
+        return resposta
 
 def consulta_bidimensional(primeiro_arg,segundo_arg):
     primeiro_arg = parametros_do_select(primeiro_arg)
