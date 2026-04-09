@@ -21,11 +21,21 @@ def consulta_por_argumento(argumento):
         resposta = session.execute(comando_sql).all()
         return resposta
 
+def consulta_longitudinal(argumento):
+    if argumento != 'perido':
+        argumento = parametros_do_select(argumento)
+        with Session(bind=engine) as session:
+            comando_sql = select(argumento, Usuarios.matricula, Usuarios.periodo)
+            resposta = session.execute(comando_sql).all()
+            return resposta
+    return Exception
+
 def consulta_bidimensional(primeiro_arg,segundo_arg):
     primeiro_arg = parametros_do_select(primeiro_arg)
     segundo_arg = parametros_do_select(segundo_arg)
     with Session(bind=engine) as session:
-        comando_sql = select(primeiro_arg, segundo_arg, func.count(Usuarios.id).label('total')).group_by(segundo_arg)
+        comando_sql = select(primeiro_arg, segundo_arg,
+                             func.count(Usuarios.id).label('total')).group_by(primeiro_arg)
         resposta = session.execute(comando_sql).all()
     return resposta
 
