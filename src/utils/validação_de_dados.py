@@ -8,8 +8,8 @@ caminho_DB = Path(__file__).parent.parent / 'database' / 'BancoDeDados.sqlite'
 engine = create_engine(f'sqlite:///{caminho_DB}')
 
 
-def verificacao(matricula: int, periodo: str):
-    validacao(matricula=matricula, periodo=periodo)
+def verificacao(matricula: int, periodo: str, crg: float) -> bool:
+    validacao(matricula=matricula, periodo=periodo, crg=crg)
     with Session(bind=engine) as session:
         comando_sql = select(Usuarios).filter_by(matricula=matricula, periodo=periodo)
         usario = session.execute(comando_sql).fetchall()
