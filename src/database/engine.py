@@ -17,7 +17,7 @@ class Usuarios(Base):
     nome: Mapped[str] = mapped_column(String(100),nullable=True)
     data_de_nascimento: Mapped[datetime] = mapped_column(DateTime,nullable=True)
     matricula: Mapped[int] = mapped_column(Integer, nullable=False)
-    primeiro_ano_eletivo: Mapped[str] = mapped_column(String,nullable=True)
+    primeiro_ano_eletivo: Mapped[str] = mapped_column(String(10),nullable=True)
     CRG: Mapped[float] = mapped_column(Float,nullable=True)
     periodo: Mapped[str] = mapped_column(String(15), nullable=False)
     genero: Mapped[str] = mapped_column(String(20),nullable=True)
@@ -46,7 +46,11 @@ engine = create_engine(f'sqlite:///{caminho_DB}')
 Base.metadata.create_all(bind=engine)
 
 def criando_usuario(
+        nome: str,
+        data_de_nascimento: datetime,
         matricula: int,
+        primeiro_ano_eletivo: str,
+        crg: float,
         periodo: str,
         genero: str,
         polo: str,
@@ -73,7 +77,11 @@ def criando_usuario(
 
     with Session(bind=engine) as session:
         usuario = Usuarios(
+            nome=nome,
+            data_de_nascimento=data_de_nascimento,
             matricula=matricula,
+            primeiro_ano_eletivo=primeiro_ano_eletivo,
+            crg=crg,
             periodo=periodo,
             genero=genero,
             polo=polo,
