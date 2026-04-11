@@ -14,10 +14,13 @@ class Usuarios(Base):
     __tablename__ = 'usuarios'
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    nome: Mapped[str] = mapped_column(String(100),nullable=True)
+    data_de_nascimento: Mapped[datetime] = mapped_column(DateTime,nullable=True)
     matricula: Mapped[int] = mapped_column(Integer, nullable=False)
+    primeiro_ano_eletivo: Mapped[str] = mapped_column(String,nullable=True)
+    CRG: Mapped[float] = mapped_column(Float,nullable=True)
     periodo: Mapped[str] = mapped_column(String(15), nullable=False)
     genero: Mapped[str] = mapped_column(String(20),nullable=True)
-    #crg: Mapped[float] = mapped_column(Float, nullable=False)
     polo: Mapped[str] = mapped_column(String(15),nullable=True)
     cor_etnia: Mapped[str] = mapped_column(String(10),nullable=True)
     pcd: Mapped[str] = mapped_column(String(5),nullable=True)
