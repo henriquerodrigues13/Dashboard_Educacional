@@ -7,6 +7,11 @@ from sqlalchemy.orm import Session
 caminho_DB = Path(__file__).parent / 'BancoDeDados.sqlite'
 engine = create_engine(f'sqlite:///{caminho_DB}')
 
+def crg_medio():
+    with Session(engine) as session:
+        comando_sql = select(Usuarios.matricula,Usuarios.CRG).group_by(Usuarios.matricula).having(Usuarios.CRG > 0)
+        resposta = session.execute(comando_sql).all()
+        return resposta
 
 def matriculas_unicas():
     with Session(bind=engine) as session:
@@ -35,7 +40,7 @@ def consulta_bidimensional(primeiro_arg,segundo_arg):
     segundo_arg = parametros_do_select(segundo_arg)
     with Session(bind=engine) as session:
         comando_sql = select(primeiro_arg, segundo_arg,
-                             func.count(Usuarios.id).label('total')).group_by(primeiro_arg)
+                             func.count(Usuarios.id).label('total'))
         resposta = session.execute(comando_sql).all()
     return resposta
 
