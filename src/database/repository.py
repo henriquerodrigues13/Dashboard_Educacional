@@ -9,10 +9,12 @@ engine = create_engine(f'sqlite:///{caminho_DB}')
 
 def crg_medio():
     with Session(engine) as session:
-        comando_sql = select(Usuarios.matricula,Usuarios.CRG).group_by(Usuarios.matricula).having(Usuarios.CRG > 0)
+        comando_sql = select(Usuarios.CRG).group_by(Usuarios.matricula).having(Usuarios.CRG > 0)
         resposta = session.execute(comando_sql).all()
-        return resposta
-
+        soma = 0
+        for i in resposta:
+            soma += i[0]
+        return round(soma / len(resposta), 4)
 def matriculas_unicas():
     with Session(bind=engine) as session:
         comando_sql = select(func.count(Usuarios.matricula.distinct()))
