@@ -15,21 +15,30 @@ def crg_medio():
         for i in resposta:
             soma += i[0]
         return round(soma / len(resposta), 4)
+
 def matriculas_unicas():
     with Session(bind=engine) as session:
         comando_sql = select(func.count(Usuarios.matricula.distinct()))
         resposta = session.execute(comando_sql).all()
         return resposta[0][0]
 
-def consulta_por_argumento(argumento):
+def consulta_por_argumento(argumento, polo= 'todos'):
+    if polo == 'todos':
+        polo = polo_todos()
+    else:
+        polo = [polo]
     argumento = parametros_do_select(argumento)
     with Session(bind=engine) as session:
         comando_sql = select(argumento)
         resposta = session.execute(comando_sql).all()
         return resposta
 
-def consulta_longitudinal(argumento):
+def consulta_longitudinal(argumento, polo='todos'):
     if argumento != 'perido':
+        if polo == 'todos':
+            polo = polo_todos()
+        else:
+            polo = [polo]
         argumento = parametros_do_select(argumento)
         with Session(bind=engine) as session:
             comando_sql = select(argumento, Usuarios.matricula, Usuarios.periodo)
@@ -37,24 +46,29 @@ def consulta_longitudinal(argumento):
             return resposta
     return Exception
 
-def consulta_bidimensional(primeiro_arg,segundo_arg):
+def consulta_bidimensional(primeiro_arg,segundo_arg, polo= 'todos'):
+    if polo == 'todos':
+        polo = polo_todos()
+    else:
+        polo = [polo]
     primeiro_arg = parametros_do_select(primeiro_arg)
     segundo_arg = parametros_do_select(segundo_arg)
     with Session(bind=engine) as session:
-        comando_sql = select(primeiro_arg, segundo_arg,
-                             func.count(Usuarios.id).label('total'))
+        comando_sql = select(primeiro_arg, segundo_arg).where(Usuarios.polo.in_(polo))
         resposta = session.execute(comando_sql).all()
     return resposta
 
 def parametros_do_select(parametro):
     match parametro:
+        case 'CRG':
+            return Usuarios.CRG
         case 'genero':
             return Usuarios.genero
-        case 'cor/etnia':
+        case 'cor_etnia':
             return Usuarios.cor_etnia
         case 'pcd':
             return Usuarios.pcd
-        case 'tipo deficiencia':
+        case 'tipo_deficiencia':
             return Usuarios.tipo_deficiencia
         case 'renda':
             return Usuarios.renda
@@ -62,29 +76,31 @@ def parametros_do_select(parametro):
             return Usuarios.descolamento
         case 'trabalho':
             return Usuarios.trabalho
-        case 'assistencia estudante':
+        case 'assistencia_estudante':
             return Usuarios.assistencia_estudante
-        case 'saude mental':
+        case 'saude_mental':
             return Usuarios.saude_mental
         case 'estresse':
             return Usuarios.estresse
         case 'acompanhamento':
             return Usuarios.acompanhamento
-        case 'escolaridade pai':
+        case 'escolaridade_pai':
             return Usuarios.escolaridade_pai
-        case 'escolaridade mae':
+        case 'escolaridade_mae':
             return Usuarios.escolaridade_mae
-        case 'qtd computador':
+        case 'qtd_computador':
             return Usuarios.qtd_computador
-        case 'qtd celular':
+        case 'qtd_celular':
             return Usuarios.qtd_celular
-        case 'computador proprio':
+        case 'computador_proprio':
             return Usuarios.computador_proprio
-        case 'gasto internet':
+        case 'gasto_internet':
             return Usuarios.gasto_internet
-        case 'acesso internet':
+        case 'acesso_internet':
             return Usuarios.acesso_internet
-        case 'tipo moradia':
+        case 'tipo_moradia':
             return Usuarios.tipo_moradia
     return None
 
+def polo_todos():
+    return ['Cameta', 'Limoeiro', 'Oeiras']
